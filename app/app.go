@@ -18,7 +18,7 @@ func Run() {
 	td := make(chan types.TradeData)
 
 	connector := exchange.BuildExchange(exchange.COINBASE, ctx)
-	connector.Receive(td)
+	connector.Feed(td)
 
 	indicator := indicator.BuildIndicator(indicator.PRINTER)
 	indicator.Receive(td)

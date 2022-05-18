@@ -49,7 +49,7 @@ func (c *Coinbase) subscribe() {
 
 }
 
-func (c *Coinbase) Receive(td chan<- types.TradeData) {
+func (c *Coinbase) Feed(td chan<- types.TradeData) {
 	log.Printf("Connecting to %s", "ws-feed.exchange.coinbase.com")
 	ws, _, err := websocket.DefaultDialer.Dial("wss://ws-feed.exchange.coinbase.com", nil)
 	c.ws = ws

@@ -14,7 +14,7 @@ const (
 )
 
 type Exchange interface {
-	Receive(td chan<- types.TradeData)
+	Feed(td chan<- types.TradeData)
 	Disconnect()
 }
 
