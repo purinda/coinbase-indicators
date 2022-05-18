@@ -1,7 +1,6 @@
 package exchange
 
 import (
-	"context"
 	"encoding/json"
 	"log"
 	"time"
@@ -11,8 +10,6 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/shopspring/decimal"
 )
-
-var conn *websocket.Conn
 
 type Subscribe struct {
 	Type       string   `json:"type"`
@@ -33,7 +30,7 @@ type MatchesData struct {
 	Time         time.Time       `json:"time"`
 }
 
-func subscribe() {
+func (c *Coinbase) subscribe() {
 	subReq := Subscribe{Type: "subscribe"}
 	subReq.ProductIDs = append(subReq.ProductIDs, "ETH-USD")
 	subReq.Channels = append(subReq.Channels, "matches")
@@ -44,41 +41,41 @@ func subscribe() {
 		log.Fatalf("Error occured while preparing JSON request body: %s", err.Error())
 	}
 
-	err = conn.WriteMessage(websocket.TextMessage, json)
+	err = c.ws.WriteMessage(websocket.TextMessage, json)
 	if err != nil {
 		log.Fatalf("Couldn't write to websocket connection: ", err.Error())
 	}
 
 }
 
-func Receive(ctx context.Context, td chan<- types.TradeData) {
+func (c *Coinbase) Receive(td chan<- types.TradeData) {
 	log.Printf("Connecting to %s", "ws-feed.exchange.coinbase.com")
-	c, _, err := websocket.DefaultDialer.Dial("wss://ws-feed.exchange.coinbase.com", nil)
-	conn = c
+	ws, _, err := websocket.DefaultDialer.Dial("wss://ws-feed.exchange.coinbase.com", nil)
+	c.ws = ws
 
 	if err != nil {
 		log.Fatal("dial:", err)
 	}
 
 	// Send the initial subscription request
-	subscribe()
+	c.subscribe()
 
 	go func() {
 		for {
 			select {
-			case <-ctx.Done():
+			case <-c.ctx.Done():
 				// Cleanly close the connection by sending a close message and then
 				// waiting (with timeout) for the server to close the connection.
-				err := conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+				err := c.ws.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
 				if err != nil {
 					log.Println("write close:", err)
 					return
 				}
 
-				defer conn.Close()
+				defer c.ws.Close()
 			default:
 				var md MatchesData
-				err := conn.ReadJSON(&md)
+				err := c.ws.ReadJSON(&md)
 				if err != nil {
 					log.Println("Response Error:", err)
 					continue
@@ -88,6 +85,15 @@ func Receive(ctx context.Context, td chan<- types.TradeData) {
 			}
 		}
 	}()
+}
+
+func (c *Coinbase) Disconnect() {
+	err := c.ws.Close()
+
+	if err != nil {
+		log.Println("Error disconnecting Coinbase connector:", err)
+		return
+	}
 }
 
 func mapTradeData(md MatchesData) types.TradeData {

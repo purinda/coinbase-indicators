@@ -17,7 +17,8 @@ func Run() {
 	go handleApplicationClose(c)
 	td := make(chan types.TradeData)
 
-	exchange.Receive(ctx, td)
+	connector := exchange.BuildExchange(exchange.COINBASE, ctx)
+	connector.Receive(td)
 
 	for match := range td {
 		fmt.Println(match.Instrument)
