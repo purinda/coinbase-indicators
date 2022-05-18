@@ -33,6 +33,7 @@ type MatchesData struct {
 func (c *Coinbase) subscribe() {
 	subReq := Subscribe{Type: "subscribe"}
 	subReq.ProductIDs = append(subReq.ProductIDs, "ETH-USD")
+	subReq.ProductIDs = append(subReq.ProductIDs, "BTC-USD")
 	subReq.Channels = append(subReq.Channels, "matches")
 
 	// Error handling for encoding and subscribe request

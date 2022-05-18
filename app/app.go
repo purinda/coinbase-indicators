@@ -2,9 +2,9 @@ package app
 
 import (
 	"coinbase-indicators/exchange"
+	"coinbase-indicators/indicator"
 	"coinbase-indicators/types"
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -20,10 +20,8 @@ func Run() {
 	connector := exchange.BuildExchange(exchange.COINBASE, ctx)
 	connector.Receive(td)
 
-	for match := range td {
-		fmt.Println(match.Instrument)
-		fmt.Println(match.Price)
-	}
+	indicator := indicator.BuildIndicator(indicator.PRINTER)
+	indicator.Receive(td)
 }
 
 func handleApplicationClose(appTerminate func()) {

@@ -3,6 +3,7 @@ package exchange
 import (
 	"coinbase-indicators/types"
 	"context"
+	"log"
 
 	"github.com/gorilla/websocket"
 )
@@ -22,18 +23,27 @@ type Coinbase struct {
 	ctx context.Context
 }
 
-type ExchangeFactory func(ctx context.Context) Exchange
+type ExchangeFactory func(t string, ctx context.Context) Exchange
 
-func create(ctx context.Context) Exchange {
-	return &Coinbase{
-		ws:  &websocket.Conn{},
-		ctx: ctx,
+func create(t string, ctx context.Context) Exchange {
+	switch t {
+	case COINBASE:
+		return &Coinbase{
+			ws:  &websocket.Conn{},
+			ctx: ctx,
+		}
+	case IBKR:
+		log.Fatalf("%s connector is not implemented", t)
+	default:
+		log.Fatalf("Can't find a connector of type: %s", t)
 	}
+
+	return nil
 }
 
 func BuildExchange(ex string, ctx context.Context) Exchange {
 	var cf ExchangeFactory = create
-	connector := cf(ctx)
+	connector := cf(ex, ctx)
 
 	return connector
 }
