@@ -11,15 +11,17 @@ import (
 	"syscall"
 )
 
-func Run() {
+func Run(config Configuration) {
 	ctx, c := context.WithCancel(context.TODO())
 
 	go handleApplicationClose(c)
 	td := make(chan types.TradeData)
 
-	connector := exchange.BuildExchange(exchange.COINBASE, ctx)
+	// Initialise exchange connector
+	connector := exchange.BuildExchange(exchange.COINBASE, config.WS_URI, config.INSTRUMENTS, ctx)
 	connector.Feed(td)
 
+	// Initialise configured indicator
 	indicator := indicator.BuildIndicator(indicator.VWAP)
 	indicator.Receive(td)
 }

@@ -20,18 +20,25 @@ type Exchange interface {
 }
 
 type Coinbase struct {
-	ws  *websocket.Conn
-	ctx context.Context
+	ws          *websocket.Conn
+	ws_url      string
+	instruments []string
+	ctx         context.Context
 }
 
-type ExchangeFactory func(t string, ctx context.Context) Exchange
+type ExchangeFactory func(ex string,
+	ws_url string,
+	instruments []string,
+	ctx context.Context) Exchange
 
-func create(t string, ctx context.Context) Exchange {
+func create(t string, ws_url string, instruments []string, ctx context.Context) Exchange {
 	switch t {
 	case COINBASE:
 		return &Coinbase{
-			ws:  &websocket.Conn{},
-			ctx: ctx,
+			ws:          &websocket.Conn{},
+			ws_url:      ws_url,
+			instruments: instruments,
+			ctx:         ctx,
 		}
 	default:
 		log.Fatalf("Can't find the connector implementation for exchange: %s", t)
@@ -40,9 +47,9 @@ func create(t string, ctx context.Context) Exchange {
 	return nil
 }
 
-func BuildExchange(ex string, ctx context.Context) Exchange {
+func BuildExchange(ex string, ws_url string, instruments []string, ctx context.Context) Exchange {
 	var cf ExchangeFactory = create
-	connector := cf(ex, ctx)
+	connector := cf(ex, ws_url, instruments, ctx)
 
 	return connector
 }

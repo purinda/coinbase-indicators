@@ -8,6 +8,10 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+type Vwap struct {
+	dataSeries map[string]*list.List
+}
+
 type VWAPData struct {
 	CumulativeVolumeXPrice map[string]decimal.Decimal
 	CumulativeVolume       map[string]decimal.Decimal
@@ -60,7 +64,9 @@ func (c *Vwap) Receive(td chan types.TradeData) {
 
 		c.sum(trade.Instrument, &cData)
 
-		fmt.Printf("Index: %d, Trade Vol: %s , Cumulative Vol: %s , VWAP: %s \n", c.dataSeries[trade.Instrument].Len(),
+		fmt.Printf("Instrument: %s, Index: %d, Trade Vol: %s , Cumulative Vol: %s , VWAP: %s \n",
+			trade.Instrument,
+			c.dataSeries[trade.Instrument].Len(),
 			trade.Volume.String(),
 			cData.CumulativeVolume[trade.Instrument].String(),
 			cData.VWAP[trade.Instrument])

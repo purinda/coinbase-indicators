@@ -2,7 +2,6 @@ package indicator
 
 import (
 	"coinbase-indicators/types"
-	"container/list"
 
 	"log"
 )
@@ -14,11 +13,6 @@ const (
 
 type Indicator interface {
 	Receive(td chan types.TradeData)
-}
-
-type Printer struct{}
-type Vwap struct {
-	dataSeries map[string]*list.List
 }
 
 type IndicatorFactory func(t string) Indicator

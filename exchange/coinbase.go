@@ -32,8 +32,7 @@ type MatchesData struct {
 
 func (c *Coinbase) subscribe() {
 	subReq := Subscribe{Type: "subscribe"}
-	// subReq.ProductIDs = append(subReq.ProductIDs, "ETH-USD")
-	subReq.ProductIDs = append(subReq.ProductIDs, "BTC-USD")
+	subReq.ProductIDs = c.instruments
 	subReq.Channels = append(subReq.Channels, "matches")
 
 	// Error handling for encoding and subscribe request
@@ -50,8 +49,8 @@ func (c *Coinbase) subscribe() {
 }
 
 func (c *Coinbase) Feed(td chan<- types.TradeData) {
-	log.Printf("Connecting to %s", "ws-feed.exchange.coinbase.com")
-	ws, _, err := websocket.DefaultDialer.Dial("wss://ws-feed.exchange.coinbase.com", nil)
+	log.Printf("Connecting to %s", c.ws_url)
+	ws, _, err := websocket.DefaultDialer.Dial(c.ws_url, nil)
 	c.ws = ws
 
 	if err != nil {

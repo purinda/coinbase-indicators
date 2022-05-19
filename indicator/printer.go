@@ -9,6 +9,8 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+type Printer struct{}
+
 type PrinterData struct {
 	Instrument string `header:"Instrument"`
 	Volume     string `header:"Volume"`
