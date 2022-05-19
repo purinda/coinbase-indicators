@@ -20,7 +20,7 @@ func Run() {
 	connector := exchange.BuildExchange(exchange.COINBASE, ctx)
 	connector.Feed(td)
 
-	indicator := indicator.BuildIndicator(indicator.PRINTER)
+	indicator := indicator.BuildIndicator(indicator.VWAP)
 	indicator.Receive(td)
 }
 

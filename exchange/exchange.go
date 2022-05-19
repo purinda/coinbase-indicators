@@ -10,6 +10,7 @@ import (
 
 const (
 	COINBASE = "coinbase"
+	BINANCE  = "binance"
 	IBKR     = "interactivebrokers"
 )
 
@@ -32,10 +33,8 @@ func create(t string, ctx context.Context) Exchange {
 			ws:  &websocket.Conn{},
 			ctx: ctx,
 		}
-	case IBKR:
-		log.Fatalf("%s connector is not implemented", t)
 	default:
-		log.Fatalf("Can't find a connector of type: %s", t)
+		log.Fatalf("Can't find the connector implementation for exchange: %s", t)
 	}
 
 	return nil
