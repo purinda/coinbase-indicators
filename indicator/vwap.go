@@ -15,17 +15,22 @@ type VWAPData struct {
 }
 
 func (c *Vwap) sum(instrument string, d *VWAPData) {
-	var result decimal.Decimal
+	var cv decimal.Decimal
+	var cvp decimal.Decimal
 
 	for e := c.dataSeries[instrument].Front(); e != nil; e = e.Next() {
-		result = result.Add(e.Value.(types.TradeData).Volume)
+		trade := e.Value.(types.TradeData)
+		cv = cv.Add(trade.Volume)
+		cvp = cvp.Add(trade.Volume.Mul(trade.Price))
 	}
 
-	d.CumulativeVolume[instrument] = result
+	d.CumulativeVolume[instrument] = cv
+	d.CumulativeVolumeXPrice[instrument] = cvp
+	d.VWAP[instrument] = cvp.Div(cv)
 }
 
 func (c *Vwap) Receive(td chan types.TradeData) {
-	// Struct to keep cumulative values
+	// Struct to keep running totals
 	var cData = VWAPData{
 		CumulativeVolumeXPrice: make(map[string]decimal.Decimal),
 		CumulativeVolume:       make(map[string]decimal.Decimal),
@@ -55,9 +60,10 @@ func (c *Vwap) Receive(td chan types.TradeData) {
 
 		c.sum(trade.Instrument, &cData)
 
-		fmt.Printf("Index: %d, Trade Vol: %s , Cumulative Vol: %s \n", c.dataSeries[trade.Instrument].Len(),
+		fmt.Printf("Index: %d, Trade Vol: %s , Cumulative Vol: %s , VWAP: %s \n", c.dataSeries[trade.Instrument].Len(),
 			trade.Volume.String(),
-			cData.CumulativeVolume[trade.Instrument].String())
+			cData.CumulativeVolume[trade.Instrument].String(),
+			cData.VWAP[trade.Instrument])
 	}
 
 }
