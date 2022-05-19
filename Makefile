@@ -1,5 +1,8 @@
-test:
-	@go test -v ./indicator ./exchange
+test-indicators:
+	go test -v ./indicator
+
+test-exchange:
+	go test -v ./exchange
 
 debug:
 	go run . -Indicator=printer

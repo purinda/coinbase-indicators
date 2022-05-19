@@ -17,6 +17,12 @@ Usage of ./coinbase-indicators:
 
 ## How to run
 
+Build first
+
+        make build
+
+### Runnable Configurations
+
 1. Run without configuration. This mode uses `Printer` indicator to output the websocket feed comes from `Coinbase` for `BTC-USD` instrument.
 
         ./coinbase-indicators
@@ -28,6 +34,11 @@ Usage of ./coinbase-indicators:
 3. Run with `vwap` indicator with data sampling with `200` data points and use data from `Coinbase` feed for `BTC-USD, ETH-USD, ETH-BTC` instruments.
 
         ./coinbase-indicators -Indicator=vwap -WindowSize=200 -TradingPairs="btc-usd,eth-usd,eth-btc"
+
+4. Running tests
+
+        make test-exchange   # runs tests for exchange module
+        make test-indicators # runs tests for indicators
 # Design
 
 Application design is done in a way to satisfy the requirement of needing to connect to `datasource` to retrieve course of sale or
