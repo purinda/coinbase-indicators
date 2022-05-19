@@ -1,6 +1,7 @@
 package app
 
 import (
+	"coinbase-indicators/exchange"
 	"flag"
 	"os"
 	"strings"
@@ -8,6 +9,7 @@ import (
 
 type Configuration struct {
 	ENV         string
+	EXCHANGE    string
 	WS_URI      string
 	INDICATOR   string
 	INSTRUMENTS []string
@@ -39,9 +41,9 @@ func getArgs() (int, string, string) {
 
 func LoadConfiguration() Configuration {
 	var instruments string
-	configuration.ENV = getEnv("ENV", "dev")
 
 	// Coinbase config
+	configuration.EXCHANGE = getEnv("EXCHANGE", exchange.COINBASE)
 	configuration.WS_URI = getEnv("WS_ENDPOINT", "wss://ws-feed.exchange.coinbase.com")
 
 	// Load config from CLI args

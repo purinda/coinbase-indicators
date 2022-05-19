@@ -18,7 +18,7 @@ func Run(config Configuration) {
 	td := make(chan types.TradeData)
 
 	// Initialise exchange connector
-	connector := exchange.BuildExchange(exchange.COINBASE, config.WS_URI, config.INSTRUMENTS, ctx)
+	connector := exchange.BuildExchange(config.EXCHANGE, config.WS_URI, config.INSTRUMENTS, ctx)
 	connector.Feed(td)
 
 	// Initialise configured indicator

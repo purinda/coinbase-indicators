@@ -64,9 +64,8 @@ func (c *Vwap) Receive(td chan types.TradeData) {
 
 		c.sum(trade.Instrument, &cData)
 
-		fmt.Printf("Instrument: %s, Index: %d, Trade Vol: %s , Cumulative Vol: %s , VWAP: %s \n",
+		fmt.Printf("Instrument: %s, Trade Vol: %s , Cumulative Vol: %s , VWAP: %s \n",
 			trade.Instrument,
-			c.dataSeries[trade.Instrument].Len(),
 			trade.Volume.String(),
 			cData.CumulativeVolume[trade.Instrument].String(),
 			cData.VWAP[trade.Instrument])
