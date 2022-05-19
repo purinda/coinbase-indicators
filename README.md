@@ -15,17 +15,17 @@ Usage of ./coinbase-indicators:
         Number of data points to consider for indicators (default 200)
 ```
 
-## Example Usage
+## How to run
 
-Run without configuration. This mode uses `Printer` indicator to output the websocket feed comes from `Coinbase` for `BTC-USD` instrument.
+1. Run without configuration. This mode uses `Printer` indicator to output the websocket feed comes from `Coinbase` for `BTC-USD` instrument.
 
         ./coinbase-indicators
 
-Run with `vwap` indicator with data sampling with `200` data points and use data from `Coinbase` feed.
+2. Run with `vwap` indicator with data sampling with `200` data points and use data from `Coinbase` feed.
 
         ./coinbase-indicators -Indicator=vwap
 
-Run with `vwap` indicator with data sampling with `200` data points and use data from `Coinbase` feed for `BTC-USD, ETH-USD, ETH-BTC` instruments.
+3. Run with `vwap` indicator with data sampling with `200` data points and use data from `Coinbase` feed for `BTC-USD, ETH-USD, ETH-BTC` instruments.
 
         ./coinbase-indicators -Indicator=vwap -WindowSize=200 -TradingPairs="btc-usd,eth-usd,eth-btc"
 # Design
