@@ -2,6 +2,7 @@ package indicator
 
 import (
 	"coinbase-indicators/types"
+	"container/list"
 
 	"log"
 )
@@ -15,24 +16,28 @@ type Indicator interface {
 	Receive(td chan types.TradeData)
 }
 
-type IndicatorFactory func(t string) Indicator
+type IndicatorFactory func(ex string, windowSize int) Indicator
 
-func create(t string) Indicator {
-	switch t {
+func create(ex string, windowSize int) Indicator {
+	switch ex {
 	case PRINTER:
 		return &Printer{}
 	case VWAP:
-		return &Vwap{}
+		return &Vwap{
+			windowSize:     windowSize,
+			dataSeries:     map[string]*list.List{},
+			cumulativeData: VWAPData{},
+		}
 	default:
-		log.Fatalf("Can't find an indicator of type: %s", t)
+		log.Fatalf("Can't find an indicator of type: %s", ex)
 	}
 
 	return nil
 }
 
-func BuildIndicator(ex string) Indicator {
+func BuildIndicator(ex string, windowSize int) Indicator {
 	var cf IndicatorFactory = create
-	i := cf(ex)
+	i := cf(ex, windowSize)
 
 	return i
 }

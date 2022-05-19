@@ -43,7 +43,7 @@ func (c *Coinbase) subscribe() {
 
 	err = c.ws.WriteMessage(websocket.TextMessage, json)
 	if err != nil {
-		log.Fatalf("Couldn't write to websocket connection: ", err.Error())
+		log.Fatalf("Couldn't write to websocket connection: %s", err.Error())
 	}
 
 }

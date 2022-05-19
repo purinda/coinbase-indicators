@@ -22,7 +22,7 @@ func Run(config Configuration) {
 	connector.Feed(td)
 
 	// Initialise configured indicator
-	indicator := indicator.BuildIndicator(config.INDICATOR)
+	indicator := indicator.BuildIndicator(config.INDICATOR, config.WINDOW_SIZE)
 	indicator.Receive(td)
 }
 

@@ -1,4 +1,4 @@
-package tests
+package exchange_test
 
 import (
 	"coinbase-indicators/exchange"
@@ -23,6 +23,7 @@ func TestConnectorBuilder(t *testing.T) {
 	})
 }
 
+// End-to-end connection test
 func TestCoinbaseConnection(t *testing.T) {
 	t.Parallel()
 
