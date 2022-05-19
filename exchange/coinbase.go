@@ -54,7 +54,7 @@ func (c *Coinbase) Feed(td chan<- types.TradeData) {
 	c.ws = ws
 
 	if err != nil {
-		log.Fatal("dial:", err)
+		log.Fatal("dial error:", err)
 	}
 
 	// Send the initial subscription request
