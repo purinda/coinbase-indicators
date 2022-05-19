@@ -18,7 +18,7 @@ type VWAPData struct {
 	VWAP                   map[string]decimal.Decimal
 }
 
-func (c *Vwap) sum(instrument string, d *VWAPData) {
+func (c *Vwap) aggregator(instrument string, d *VWAPData) {
 	var cv decimal.Decimal
 	var cvp decimal.Decimal
 
@@ -62,7 +62,7 @@ func (c *Vwap) Receive(td chan types.TradeData) {
 
 		}
 
-		c.sum(trade.Instrument, &cData)
+		c.aggregator(trade.Instrument, &cData)
 
 		fmt.Printf("Instrument: %s, Trade Vol: %s , Cumulative Vol: %s , VWAP: %s \n",
 			trade.Instrument,
