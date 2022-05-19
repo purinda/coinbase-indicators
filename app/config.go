@@ -30,7 +30,7 @@ func getArgs() (int, string, string) {
 
 	ws := flag.Int("WindowSize", 200, "Number of data points to consider for indicators")
 
-	indicator := flag.String("Indicator", "BTC-USD", "Indicator to be used for trade data interpretation (possible values: `printer`, `vwap`)")
+	indicator := flag.String("Indicator", "printer", "Indicator to be used for trade data interpretation (possible values: `printer`, `vwap`)")
 
 	flag.Parse()
 
@@ -42,11 +42,11 @@ func LoadConfiguration() Configuration {
 	configuration.ENV = getEnv("ENV", "dev")
 
 	// Coinbase config
-	configuration.WS_URI = getEnv("WS_ENDPOINT", "wss://ws-feed.prime.coinbase.com")
+	configuration.WS_URI = getEnv("WS_ENDPOINT", "wss://ws-feed.exchange.coinbase.com")
 
 	// Load config from CLI args
 	configuration.WINDOW_SIZE, instruments, configuration.INDICATOR = getArgs()
-	configuration.INSTRUMENTS = strings.Split(instruments, ",")
+	configuration.INSTRUMENTS = strings.Split(strings.ToUpper(instruments), ",")
 
 	return configuration
 }

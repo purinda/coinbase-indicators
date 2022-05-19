@@ -22,7 +22,7 @@ func Run(config Configuration) {
 	connector.Feed(td)
 
 	// Initialise configured indicator
-	indicator := indicator.BuildIndicator(indicator.VWAP)
+	indicator := indicator.BuildIndicator(config.INDICATOR)
 	indicator.Receive(td)
 }
 
