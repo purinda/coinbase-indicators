@@ -72,7 +72,7 @@ func (c *Coinbase) Feed(td chan<- types.TradeData) {
 					return
 				}
 
-				defer c.ws.Close()
+				defer c.Disconnect()
 			default:
 				var md MatchesData
 				err := c.ws.ReadJSON(&md)
@@ -96,6 +96,7 @@ func (c *Coinbase) Disconnect() {
 	}
 }
 
+// Generalise trade data to be used across downsteam modules such as indicators.
 func mapTradeData(md MatchesData) types.TradeData {
 	return types.TradeData{
 		Instrument: md.ProductID,

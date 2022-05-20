@@ -47,6 +47,13 @@ func create(t string, ws_url string, instruments []string, ctx context.Context) 
 	return nil
 }
 
+/**
+ * 	Builder method to get a copy of an Exchange object after initialisation.
+ *  Requires
+ *   - ex: Exchange name which will be used for used for finding the Go implementation.
+ *   - ws_url: Websocket URL for initiating the connection.
+ *   - instruments: Financial instruments to be used for initialisation of the feed.
+ */
 func BuildExchange(ex string, ws_url string, instruments []string, ctx context.Context) Exchange {
 	var cf ExchangeFactory = create
 	connector := cf(ex, ws_url, instruments, ctx)
